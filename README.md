@@ -1,7 +1,7 @@
 
 # ASCII Converter
 
-A native desktop app that turns images and animated GIFs into ASCII art — with live
+A native desktop app that turns images and animated GIFs into ASCII art, with live
 preview, color, background masking, brush editing, and a pile of export formats
 (including PNG sprite sheets for game engines).
 
@@ -33,7 +33,7 @@ Built with PyQt6, Pillow, and NumPy.
 The sprite-sheet export tiles every frame into a single PNG grid of uniform-size cells,
 ready to import into a game engine. It honors the background mask (transparent RGBA) and
 any paint edits, and after exporting it reports the grid layout and the **per-frame cell
-size** in the status bar — that's the value you feed into your engine's frame-slicing
+size** in the status bar, that's the value you feed into your engine's frame-slicing
 (e.g. Godot's *hframes/vframes*, Aseprite, Unity's Sprite Editor).
 
 > **Tip:** the font-size slider is a point size in the preview but is applied as a pixel
