@@ -1,3 +1,16 @@
+<!-- ─── Pinned-repo card ─── -->
+<table width="440">
+<tr><td>
+
+📌&nbsp; <a href="https://github.com/Codringher/asciiconverter"><b>asciiconverter</b></a> &nbsp;<kbd>Public</kbd>
+
+Image &amp; GIF → ASCII art desktop studio — live preview, color, background masking, brush editing, and PNG sprite-sheet export for game engines.
+
+🔵 Python &nbsp;·&nbsp; <a href="https://github.com/Codringher/asciiconverter/stargazers">⭐ Star</a> &nbsp;·&nbsp; <a href="https://github.com/Codringher/asciiconverter/fork">🍴 Fork</a> &nbsp;·&nbsp; ⚖️ MIT
+
+</td></tr>
+</table>
+
 # ASCII Converter
 
 A native desktop app that turns images and animated GIFs into ASCII art — with live
@@ -5,9 +18,6 @@ preview, color, background masking, brush editing, and a pile of export formats
 (including PNG sprite sheets for game engines).
 
 Built with PyQt6, Pillow, and NumPy.
-
-<img width="3412" height="1363" alt="image" src="https://github.com/user-attachments/assets/b01c1f41-29ed-4805-98b7-3915de3017f9" />
-
 
 ## Features
 
