@@ -1,10 +1,13 @@
 # ASCII Converter
 
-A native desktop app that turns images and animated GIFs into ASCII art — with live
+A native desktop app that turns images and animated GIFs into ASCII art with live
 preview, color, background masking, brush editing, and a pile of export formats
 (including PNG sprite sheets for game engines).
 
 Built with PyQt6, Pillow, and NumPy.
+
+<img width="3386" height="1373" alt="image" src="https://github.com/user-attachments/assets/a50a63b8-6cea-41a3-b681-51dd4eb914d8" />
+
 
 ## Features
 
