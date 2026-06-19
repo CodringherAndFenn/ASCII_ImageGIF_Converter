@@ -1,15 +1,3 @@
-<!-- ─── Pinned-repo card ─── -->
-<table width="440">
-<tr><td>
-
-📌&nbsp; <a href="https://github.com/Codringher/asciiconverter"><b>asciiconverter</b></a> &nbsp;<kbd>Public</kbd>
-
-Image &amp; GIF → ASCII art desktop studio — live preview, color, background masking, brush editing, and PNG sprite-sheet export for game engines.
-
-🔵 Python &nbsp;·&nbsp; <a href="https://github.com/Codringher/asciiconverter/stargazers">⭐ Star</a> &nbsp;·&nbsp; <a href="https://github.com/Codringher/asciiconverter/fork">🍴 Fork</a> &nbsp;·&nbsp; ⚖️ MIT
-
-</td></tr>
-</table>
 
 # ASCII Converter
 
