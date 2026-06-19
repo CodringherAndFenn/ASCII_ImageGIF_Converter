@@ -11,7 +11,8 @@ def export_txt(chars: list[list[str]], path: str) -> None:
 _HTML_STYLE = (
     '<style>\n'
     'body { background:#0d0d0d; margin:0; padding:1rem; }\n'
-    "pre { font-family:'JetBrains Mono',monospace; font-size:10px; line-height:1;\n"
+    "pre { font-family:'JetBrains Mono','Cascadia Code','DejaVu Sans Mono',"
+    "'Noto Sans Mono','Symbola',monospace; font-size:10px; line-height:1;\n"
     '      color:#c8c8c8; white-space:pre; }\n'
     '</style>'
 )
@@ -50,7 +51,7 @@ def export_png(
     if not chars:
         return
 
-    font = _load_font(font_size)
+    font = _load_font(font_size, _grid_has_braille(chars))
     cell_w, cell_h = _measure_cell(font)
 
     rows = len(chars)
@@ -165,7 +166,7 @@ def export_spritesheet(
     import math
     from PIL import Image
 
-    font = _load_font(font_size)
+    font = _load_font(font_size, _frames_have_braille(frames_chars))
     cell_w, cell_h = _measure_cell(font)
 
     # Uniform frame size across the sheet (braille rounding can vary the grid).
@@ -224,7 +225,7 @@ def export_anim_gif(
     if not frames_chars:
         return
 
-    font = _load_font(font_size)
+    font = _load_font(font_size, _frames_have_braille(frames_chars))
     cell_w, cell_h = _measure_cell(font)
 
     # Common canvas across frames guards against braille rounding differences
@@ -326,10 +327,13 @@ def _render_frame_image(
 _FONT_SEARCH_PATHS = [
     "/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Regular.ttf",
     "/usr/share/fonts/OTF/JetBrainsMono-Regular.ttf",
+    "/usr/share/fonts/TTF/JetBrainsMonoNerdFont-Regular.ttf",
     "/usr/share/fonts/jetbrains-mono/JetBrainsMono-Regular.ttf",
     "/usr/share/fonts/truetype/firacode/FiraCode-Regular.ttf",
     "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
+    "/usr/share/fonts/liberation/LiberationMono-Regular.ttf",
     "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+    "/usr/share/fonts/TTF/DejaVuSansMono.ttf",
     "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
     "C:/Windows/Fonts/consola.ttf",
     "C:/Windows/Fonts/cour.ttf",
@@ -337,16 +341,65 @@ _FONT_SEARCH_PATHS = [
     "/System/Library/Fonts/Menlo.ttc",
 ]
 
+_BRAILLE_LO, _BRAILLE_HI = 0x2800, 0x28FF
 
-def _load_font(size: int):
+
+def _grid_has_braille(chars: list) -> bool:
+    """True if any cell uses a Braille-pattern glyph (U+2800–U+28FF).
+    Those glyphs live in very few fonts, so raster exports must pick a
+    font that actually covers them — PIL draws .notdef boxes otherwise."""
+    for row in chars:
+        for ch in row:
+            if ch and _BRAILLE_LO <= ord(ch[0]) <= _BRAILLE_HI:
+                return True
+    return False
+
+
+def _frames_have_braille(frames_chars: list) -> bool:
+    return any(_grid_has_braille(c) for c in frames_chars if c)
+
+
+def _fc_match(want_braille: bool) -> str | None:
+    """Resolve a real monospace font path via fontconfig, preferring
+    JetBrains Mono. When Braille glyphs are needed, require charset
+    coverage so fontconfig hands back a Braille-capable font.
+    Returns None when fontconfig is unavailable (e.g. Windows/macOS)."""
+    import shutil
+    import subprocess
+    fc = shutil.which('fc-match')
+    if not fc:
+        return None
+    pattern = 'JetBrains Mono,monospace:spacing=100'
+    if want_braille:
+        pattern += ':charset=2800-28ff'
+    try:
+        res = subprocess.run(
+            [fc, '-f', '%{file}', pattern],
+            capture_output=True, text=True, timeout=5,
+        )
+    except Exception:
+        return None
+    path = res.stdout.strip()
+    return path if path and os.path.exists(path) else None
+
+
+def _load_font(size: int, want_braille: bool = False):
     from PIL import ImageFont
-    for fp in _FONT_SEARCH_PATHS:
-        if os.path.exists(fp):
+    candidates = []
+    matched = _fc_match(want_braille)
+    if matched:
+        candidates.append(matched)
+    candidates += _FONT_SEARCH_PATHS
+    for fp in candidates:
+        if fp and os.path.exists(fp):
             try:
                 return ImageFont.truetype(fp, size)
             except Exception:
                 continue
-    return ImageFont.load_default()
+    try:
+        return ImageFont.load_default(size)  # Pillow >= 10.1: sized TTF
+    except TypeError:
+        return ImageFont.load_default()
 
 
 def _measure_cell(font) -> tuple[int, int]:
