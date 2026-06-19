@@ -1,13 +1,10 @@
 # ASCII Converter
 
-A native desktop app that turns images and animated GIFs into ASCII art with live
+A native desktop app that turns images and animated GIFs into ASCII art — with live
 preview, color, background masking, brush editing, and a pile of export formats
 (including PNG sprite sheets for game engines).
 
 Built with PyQt6, Pillow, and NumPy.
-
-<img width="3386" height="1373" alt="image" src="https://github.com/user-attachments/assets/a50a63b8-6cea-41a3-b681-51dd4eb914d8" />
-
 
 ## Features
 
@@ -51,9 +48,10 @@ size** in the status bar — that's the value you feed into your engine's frame-
   - Pillow
   - NumPy
   - opencv-python-headless
-- A monospace font for crisp exports. JetBrains Mono is preferred; the app falls back to
-  Fira Code, Liberation Mono, DejaVu Sans Mono, Consolas, Courier, or Menlo if it's not
-  installed.
+- No font installation needed: raster exports (PNG/GIF/sprite sheets) use a bundled
+  copy of JuliaMono (`app/fonts/`), which covers ASCII, block elements, and Braille, so
+  output is identical on every machine. If the bundled font is missing, the app falls
+  back to a system monospace via fontconfig.
 
 ## Running
 
@@ -126,3 +124,7 @@ Qt-dependent code can be exercised with `QT_QPA_PLATFORM=offscreen`.
 ## License
 
 MIT
+
+The bundled font **JuliaMono** (`app/fonts/JuliaMono-Regular.ttf`) is © cormullion and
+licensed under the SIL Open Font License 1.1; the full license is in
+`app/fonts/OFL.txt`.
