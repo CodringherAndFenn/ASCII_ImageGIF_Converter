@@ -6,6 +6,9 @@ preview, color, background masking, brush editing, and a pile of export formats
 
 Built with PyQt6, Pillow, and NumPy.
 
+<img width="3412" height="1363" alt="image" src="https://github.com/user-attachments/assets/b01c1f41-29ed-4805-98b7-3915de3017f9" />
+
+
 ## Features
 
 - **Live conversion** — adjust any control and the preview re-renders in the background
